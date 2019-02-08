@@ -34,59 +34,54 @@ void* tfunc(void *arg) {
 
 int main(void)
 {
-  //int i,j;
   pthread_t tid[6];
   struct threadargs *targs[6];
 
-  /* allocate memory for threadargs and zero out semaphore signals */
+  // allocate memory for threadargs and zero out semaphore signals
   for(int i=0;i<6;i++) { 
     targs[i] = (struct threadargs*) malloc(sizeof(struct threadargs));
     for(int j=0;j<6;j++) { targs[i]->signal[j]=0; }
   }
 
-  targs[0]->id=1;             /* thread number 1 */
-  targs[0]->sec=1;            /* how long to sleep */
-  targs[0]->signal[1]=1;      /* which threads to wake up when done */
+  targs[0]->id=1;             // thread number 1
+  targs[0]->sec=1;            // how long to sleep
+  targs[0]->signal[1]=1;      // which threads to wake up when done
   targs[0]->signal[4]=1;
-  sem_init(&sem[targs[0]->id-1],SHARED,1); /* start waiting(0) or running(1)? */
+  sem_init(&sem[targs[0]->id-1],SHARED,1); // start waiting(0) or running(1)?
   pthread_create(&tid[0], NULL, tfunc, (void *) targs[0]);
-  printf("DEBUG %d\n", 9);
 
   targs[1]->id=2;             // thread number 1 
   targs[1]->sec=2;            // how long to sleep 
   targs[1]->signal[3]=1;      // which threads to wake up when done 
-  sem_init(&sem[targs[1]->id-1],SHARED,0); // start waiting(0) or running(1)? 
+  sem_init(&sem[targs[1]->id-1],SHARED,0); // start waiting(0) or running(1)?
   pthread_create(&tid[1], NULL, tfunc, (void *) targs[1]);
 
   targs[2]->id=3;             // thread number 1 
   targs[2]->sec=3;            // how long to sleep 
   targs[2]->signal[3]=1;      // which threads to wake up when done 
-  sem_init(&sem[targs[2]->id-1],SHARED,1); // start waiting(0) or running(1)? 
+  sem_init(&sem[targs[2]->id-1],SHARED,1); // start waiting(0) or running(1)?
   pthread_create(&tid[2], NULL, tfunc, (void *) targs[2]);
 
   targs[3]->id=4;             // thread number 1 
   targs[3]->sec=2;            // how long to sleep 
-  sem_init(&sem[targs[3]->id-1],SHARED,0); // start waiting(0) or running(1)? 
+  sem_init(&sem[targs[3]->id-1],SHARED,0); // start waiting(0) or running(1)?
   pthread_create(&tid[3], NULL, tfunc, (void *) targs[3]);
 
   targs[4]->id=5;             // thread number 1 
   targs[4]->sec=3;            // how long to sleep 
   targs[4]->signal[5]=1;      // which threads to wake up when done 
-  sem_init(&sem[targs[4]->id-1],SHARED,0); // start waiting(0) or running(1)? 
+  sem_init(&sem[targs[4]->id-1],SHARED,0); // start waiting(0) or running(1)?
   pthread_create(&tid[4], NULL, tfunc, (void *) targs[4]);
 
   targs[5]->id=6;             // thread number 1 
   targs[5]->sec=3;            // how long to sleep 
-  sem_init(&sem[targs[5]->id-1],SHARED,0); // start waiting(0) or running(1)? 
+  sem_init(&sem[targs[5]->id-1],SHARED,0); // start waiting(0) or running(1)?
   pthread_create(&tid[5], NULL, tfunc, (void *) targs[5]);
-/*
-// GJENTA KODELINJENE OVER FOR DE FEM NESTE TRÅDENE, BARE ENDRE PARAMETRE
- */
+
+
   for(int i=0;i<=5;i++) {
     pthread_join(tid[i], NULL);
   }
-
-  //sem_post(&sem[0]);
 
   return 0;
 }
